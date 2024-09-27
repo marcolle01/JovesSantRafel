@@ -5,8 +5,6 @@ import insertUserService from '../../services/users/insertUserService.js';
 
 const registerUserController = async (req, res, next) => {
     try {
-        const registrationcode = Randomstring.generate(30);
-
         const {
             email,
             username,
@@ -20,6 +18,8 @@ const registerUserController = async (req, res, next) => {
             city,
         } = req.body;
 
+        const registrationCode = Randomstring.generate(30);
+
         await insertUserService(
             email,
             username,
@@ -31,7 +31,7 @@ const registerUserController = async (req, res, next) => {
             birthdate,
             address,
             city,
-            registrationcode
+            registrationCode
         );
         res.send({
             status: 'ok',
