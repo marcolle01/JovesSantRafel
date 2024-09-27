@@ -29,7 +29,7 @@ const initDb = async () => {
                 lastName VARCHAR(50),
                 dni CHAR(11) UNIQUE,
                 password VARCHAR(255) NOT NULL,
-                phone VARCHAR(15),
+                phone VARCHAR(15) UNIQUE,
                 birthdate DATE,
                 address VARCHAR(100),
                 city VARCHAR(25),
