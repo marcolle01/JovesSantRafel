@@ -1,5 +1,6 @@
-import updateDeleteUserService from '../../services/users/UpdateDeleteUserService.js';
+import updateDeleteUserService from '../../services/users/updateDeleteUserService.js';
 import generateErrorUtil from '../../utils/generateErrorUtil.js';
+
 const deleteUserController = async (req, res, next) => {
     try {
         const loggedId = req.userLogged.id;

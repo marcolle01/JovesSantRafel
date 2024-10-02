@@ -12,6 +12,7 @@ import {
     deleteUserController,
     getOwnUserProfileController,
     editUserController,
+    editUserPasswordController,
 } from '../controllers/users/index.js';
 
 const router = express.Router();
@@ -23,6 +24,7 @@ router.get('/users/validate/:registrationCode', validateUserController);
 router.post('/users/login', loginUserController);
 
 router.get('/user', authUser, getOwnUserProfileController);
+
 router.get(
     '/user/admin/:userId',
     authUser,
@@ -32,6 +34,13 @@ router.get(
 );
 
 router.put('/user/:userId', authUser, userExists, editUserController);
+
+router.put(
+    '/user/password/:userId',
+    authUser,
+    userExists,
+    editUserPasswordController
+);
 
 router.delete('/user/:userId', authUser, userExists, deleteUserController);
 

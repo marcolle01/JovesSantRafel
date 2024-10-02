@@ -5,6 +5,7 @@ import loginUserController from './loginUserController.js';
 import deleteUserController from './deleteUserController.js';
 import getOwnUserProfileController from './getOwnUserProfileController.js';
 import editUserController from './editUserController.js';
+import editUserPasswordController from './editUserPasswordController.js';
 
 export {
     registerUserController,
@@ -14,4 +15,5 @@ export {
     deleteUserController,
     getOwnUserProfileController,
     editUserController,
+    editUserPasswordController,
 };

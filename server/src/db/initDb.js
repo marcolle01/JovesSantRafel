@@ -65,14 +65,16 @@ const initDb = async () => {
 
         await pool.query(
             `
-            CREATE TABLE IF NOT EXISTS photos(
-                id CHAR(36) PRIMARY KEY NOT NULL,
-                photoUrl VARCHAR(255),
-                eventId CHAR(36) NOT NULL,
-                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                deletedAt TIMESTAMP,
-                FOREIGN KEY (eventId) REFERENCES events(id))
+            CREATE TABLE IF NOT EXISTS photos (
+            id CHAR(36) PRIMARY KEY NOT NULL,
+            photoUrl VARCHAR(255),
+            userId CHAR(36) NOT NULL,
+            eventId CHAR(36) NOT NULL,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            deletedAt TIMESTAMP,
+            FOREIGN KEY (userId) REFERENCES users(id),
+            FOREIGN KEY (eventId) REFERENCES events(id));
                
             `
         );
