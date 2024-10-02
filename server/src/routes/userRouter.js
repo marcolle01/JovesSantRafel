@@ -13,6 +13,8 @@ import {
     getOwnUserProfileController,
     editUserController,
     editUserPasswordController,
+    recoverPasswordController,
+    sendRecoverPasswordController,
 } from '../controllers/users/index.js';
 
 const router = express.Router();
@@ -41,6 +43,10 @@ router.put(
     userExists,
     editUserPasswordController
 );
+
+router.patch('/users/password', recoverPasswordController);
+
+router.post('/users/password/recover', sendRecoverPasswordController);
 
 router.delete('/user/:userId', authUser, userExists, deleteUserController);
 
