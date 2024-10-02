@@ -19,7 +19,7 @@ const registerUserController = async (req, res, next) => {
                     /^[0-9]{8}[A-Z]$|^[XYZ][0-9]{7}[A-Z]$|^[KLM][0-9]{7}[A-Z]$/
                 )
                 .required(),
-            password: Joi.string().min(6).max(8).required(),
+            password: Joi.string().min(8).max(15).required(),
             phone: Joi.string()
                 .pattern(/^[0-9]{9}$/)
                 .required(),

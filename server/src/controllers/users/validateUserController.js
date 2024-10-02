@@ -3,7 +3,7 @@ import updateUserRegisterService from '../../services/users/updateUserRegisterSe
 
 import generateErrorUtil from '../../utils/generateErrorUtil.js';
 
-const ValidateUserController = async (req, res, next) => {
+const validateUserController = async (req, res, next) => {
     try {
         const schema = Joi.object().keys({
             registrationCode: Joi.string().length(30),
@@ -26,4 +26,4 @@ const ValidateUserController = async (req, res, next) => {
     }
 };
 
-export default ValidateUserController;
+export default validateUserController;
