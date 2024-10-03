@@ -1,3 +1,4 @@
 import newEventController from './newEventController.js';
 import listEventsController from './listEventsController.js';
-export { newEventController, listEventsController };
+import deleteEventController from './deleteEventController.js';
+export { newEventController, listEventsController, deleteEventController };

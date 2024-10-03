@@ -4,7 +4,6 @@ const selectEventsService = async (
     title,
     description,
     eventDate,
-
     price,
     location
 ) => {
@@ -31,8 +30,7 @@ WHERE
     e.deletedAt IS NULL
 ORDER BY 
     e.eventDate DESC, p.createdAt DESC;
-`,
-        [title, description, eventDate, price, location]
+`
     );
 
     return events;
