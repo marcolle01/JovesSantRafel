@@ -19,6 +19,7 @@ const {
     UPLOADS_DIR,
     AVATAR_DIR,
     EVENT_IMAGE_DIR,
+    HISTORIES_DIR,
 } = process.env;
 
 export {
@@ -40,4 +41,5 @@ export {
     UPLOADS_DIR,
     AVATAR_DIR,
     EVENT_IMAGE_DIR,
+    HISTORIES_DIR,
 };

@@ -9,28 +9,36 @@ const selectEventsService = async (
 ) => {
     const pool = await getPool();
     const [events] = await pool.query(
-        ` SELECT 
-    e.id AS eventId,
-    e.title AS eventTitle,
-    e.description AS eventDescription,
-    e.eventDate AS eventDate,
-    e.price AS eventPrice,
-    e.location AS eventLocation,
-    e.image AS eventImage, 
-    p.photoUrl AS photoUrl,
-    p.createdAt AS photoUploadedAt,
-    u.username AS username   
-FROM 
-    events e
-LEFT JOIN 
-    photos p ON e.id = p.eventId
-LEFT JOIN 
-    users u ON p.userId = u.id
-WHERE 
-    e.deletedAt IS NULL
-ORDER BY 
-    e.eventDate DESC, p.createdAt DESC;
-`
+        `SELECT 
+            e.id AS eventId,
+            e.title AS eventTitle,
+            e.description AS eventDescription,
+            e.eventDate AS eventDate,
+            e.price AS eventPrice,
+            e.location AS eventLocation,
+            e.image AS eventImage,
+            (
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'photoUrl', p.photoUrl, 
+                        'photoUploadedAt', p.createdAt,
+                        'photoUploaderUsername', pu.username
+                    )
+                )
+                FROM photos p
+                LEFT JOIN users pu ON p.userId = pu.id
+                WHERE p.eventId = e.id
+            ) AS photos,
+            u.username AS eventCreatorUsername
+        FROM 
+            events e
+        LEFT JOIN 
+            users u ON e.createdBy = u.id
+        WHERE 
+            e.deletedAt IS NULL
+        ORDER BY 
+            e.eventDate DESC;
+        `
     );
 
     return events;
