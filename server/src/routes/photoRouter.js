@@ -1,17 +1,16 @@
 import express from 'express';
 
 import authUser from '../middleware/authUser.js';
-import userExists from '../middleware/userExists.js';
-import { uploadUserPhotoController } from '../controllers/photos/index.js';
+
+import {
+    uploadUserPhotoController,
+    deleteUserPhotoController,
+} from '../controllers/photos/index.js';
 
 const router = express.Router();
 
-router.post(
-    '/:eventId/photos',
-    authUser,    
-    uploadUserPhotoController
-);
+router.post('/:eventId/photos', authUser, uploadUserPhotoController);
 
-router.delete('/photos', authUser);
+router.delete('/events/:photoId', authUser, deleteUserPhotoController);
 
 export default router;
