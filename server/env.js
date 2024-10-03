@@ -18,6 +18,7 @@ const {
     CLIENT_URL,
     UPLOADS_DIR,
     AVATAR_DIR,
+    EVENT_IMAGE_DIR,
 } = process.env;
 
 export {
@@ -38,4 +39,5 @@ export {
     CLIENT_URL,
     UPLOADS_DIR,
     AVATAR_DIR,
+    EVENT_IMAGE_DIR,
 };
