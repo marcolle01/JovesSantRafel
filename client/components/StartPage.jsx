@@ -5,18 +5,14 @@ import {
     Image,
     Pressable,
     Text,
-    Button,
 } from 'react-native';
-
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import startPagebg from '../assets/startPagebg.png';
 import icon from '../assets/icon.png';
 
-const StartPage = () => {
-    const insets = useSafeAreaInsets();
+const StartPage = ({ navigation }) => {
     return (
-        <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+        <View style={[styles.container]}>
             <ImageBackground
                 source={startPagebg}
                 style={styles.image}
@@ -28,8 +24,8 @@ const StartPage = () => {
                     />
                 </View>
                 <Pressable
+                    onPress={() => navigation.navigate('LogInRegister')}
                     style={styles.pressable}
-                    onPress={() => console.log('Iniciar Sesión')}
                 >
                     <Text>Iniciar Sesión</Text>
                 </Pressable>
