@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     StyleSheet,
     View,
@@ -8,10 +9,18 @@ import {
 } from 'react-native';
 
 import startPagebg from '../assets/startPagebg.png';
-import icon from '../assets/icon.png';
 
 const LogInRegister = ({ navigation }) => {
-    // return <View style={[styles.container]}></View>;
+    return <View style={[styles.container]}></View>;
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#D77418',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
 
 export default LogInRegister;
