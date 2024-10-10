@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     StyleSheet,
     View,
@@ -8,23 +8,41 @@ import {
     TextInput,
     Keyboard,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import startPagebg from '../assets/startPagebg.png';
 import icon from '../assets/icon.png';
 
+import { AuthContext } from '../context/AuthContext';
+import useUser from '../hooks/useUser';
+
+import { fetchLoginUserServices } from '../services/userServices';
+
 const LogInRegister = ({ navigation }) => {
+    const { authLogin } = useContext(AuthContext);
+    const { user } = useUser();
+
     const [isLogin, setIsLogin] = useState(true);
     const [keyboardStatus, setKeyboardStatus] = useState('');
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
     };
 
-    const handleConfirmDate = (selectedDate) => {
+    const hideDatePicker = () => {
         setDatePickerVisibility(false);
     };
+
+    // const handleConfirm = (selectedDate) => {
+    //     const currentDate = selectedDate || date;
+    //     setDate(currentDate.toLocaleDateString());
+    //     hideDatePicker();
+    // };
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -45,6 +63,24 @@ const LogInRegister = ({ navigation }) => {
             keyboardDidHideListener.remove();
         };
     }, []);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const authToken = await fetchLoginUserServices(email, password);
+            console.log('Auth Token:', authToken);
+
+            authLogin(authToken.data);
+            Toast.show({ type: 'success', text1: 'Iniciando sesión' });
+
+            navigation.navigate('StartPage');
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: error.message,
+            });
+        }
+    };
 
     return (
         <View style={[styles.container]}>
@@ -98,6 +134,8 @@ const LogInRegister = ({ navigation }) => {
                             placeholder='Email'
                             keyboardType='email-address'
                             placeholderTextColor='white'
+                            value={email}
+                            onChange={(e) => setEmail(e.nativeEvent.text)}
                         ></TextInput>
                         <View style={styles.underline} />
 
@@ -106,6 +144,8 @@ const LogInRegister = ({ navigation }) => {
                             placeholder='Contraseña'
                             placeholderTextColor='white'
                             secureTextEntry
+                            value={password}
+                            onChange={(e) => setPassword(e.nativeEvent.text)}
                         ></TextInput>
                         <View style={styles.underline} />
 
@@ -119,7 +159,7 @@ const LogInRegister = ({ navigation }) => {
                                     height: 55,
                                 },
                             ]}
-                            onPress={() => navigation.navigate('')}
+                            onPress={handleLogin}
                         >
                             <Text
                                 style={[styles.buttonText, { marginTop: 18 }]}
@@ -173,17 +213,18 @@ const LogInRegister = ({ navigation }) => {
                                 placeholderTextColor='white'
                             ></TextInput>
                             <View style={styles.underline} />
+
                             <TextInput
                                 style={styles.input}
-                                placeholder='Data de Nacimiento'
+                                placeholder='Data de nacimiento'
                                 onFocus={showDatePicker}
                                 placeholderTextColor='white'
                             />
                             <DateTimePickerModal
                                 isVisible={isDatePickerVisible}
                                 mode='date'
-                                onConfirm={handleConfirmDate]}
-                                onCancel={!showDatePicker}
+                                // onConfirm={handleConfirm}
+                                onCancel={hideDatePicker}
                             />
 
                             <View style={styles.underline} />
