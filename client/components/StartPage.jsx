@@ -31,7 +31,9 @@ const StartPage = ({ navigation }) => {
                 </Pressable>
                 <Text style={styles.text}>
                     ¿No tienes una cuenta?{' '}
-                    <Pressable>
+                    <Pressable
+                        onPress={() => navigation.navigate('LogInRegister')}
+                    >
                         <Text style={styles.textButton}>Registrate</Text>
                     </Pressable>
                 </Text>

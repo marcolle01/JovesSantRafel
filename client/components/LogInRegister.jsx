@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -6,13 +6,45 @@ import {
     Pressable,
     Text,
     TextInput,
+    Keyboard,
 } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import startPagebg from '../assets/startPagebg.png';
 import icon from '../assets/icon.png';
 
 const LogInRegister = ({ navigation }) => {
     const [isLogin, setIsLogin] = useState(true);
+    const [keyboardStatus, setKeyboardStatus] = useState('');
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const handleConfirmDate = (selectedDate) => {
+        setDatePickerVisibility(false);
+    };
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardStatus(true);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardStatus(false);
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     return (
         <View style={[styles.container]}>
@@ -26,7 +58,14 @@ const LogInRegister = ({ navigation }) => {
                     style={styles.icon}
                 />
             </View>
-            <View style={styles.formContainer}>
+
+            <View
+                style={
+                    keyboardStatus
+                        ? styles.formContainerKeyboardIsOpened
+                        : styles.formContainer
+                }
+            >
                 <View style={styles.buttonContainer}>
                     <Pressable
                         style={[styles.button, isLogin && styles.activeButton]}
@@ -58,14 +97,14 @@ const LogInRegister = ({ navigation }) => {
                             style={styles.input}
                             placeholder='Email'
                             keyboardType='email-address'
-                            placeholderTextColor='black'
+                            placeholderTextColor='white'
                         ></TextInput>
                         <View style={styles.underline} />
 
                         <TextInput
                             style={styles.input}
                             placeholder='Contraseña'
-                            placeholderTextColor='black'
+                            placeholderTextColor='white'
                             secureTextEntry
                         ></TextInput>
                         <View style={styles.underline} />
@@ -94,35 +133,78 @@ const LogInRegister = ({ navigation }) => {
                         </Text>
                     </View>
                 ) : (
-                    <View style={styles.form}>
-                        <Text>Registrate en Joves Sant Rafel</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Username'
-                        ></TextInput>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Email'
-                            keyboardType='email-address'
-                        ></TextInput>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Contraseña'
-                            secureTextEntry
-                        ></TextInput>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Repite la contraseña'
-                            secureTextEntry
-                        ></TextInput>
+                    <View
+                        style={
+                            keyboardStatus
+                                ? styles.registerFormContainerKeyboardIsOpened
+                                : styles.registerFormContainer
+                        }
+                    >
+                        <View style={styles.form}>
+                            <TextInput
+                                style={styles.inputRegister}
+                                placeholder='Email'
+                                keyboardType='email-address'
+                                placeholderTextColor='white'
+                            ></TextInput>
+                            <View style={styles.underline} />
+                            <TextInput
+                                style={styles.inputRegister}
+                                placeholder='Nombre de usuario'
+                                placeholderTextColor='white'
+                            ></TextInput>
+                            <View style={styles.underline} />
+                            <TextInput
+                                style={styles.inputRegister}
+                                placeholder='Nombre'
+                                placeholderTextColor='white'
+                            ></TextInput>
+                            <View style={styles.underline} />
+                            <TextInput
+                                style={styles.inputRegister}
+                                placeholder='Apellidos'
+                                placeholderTextColor='white'
+                            ></TextInput>
+                            <View style={styles.underline} />
+                            <TextInput
+                                style={styles.inputRegister}
+                                placeholder='Contraseña'
+                                secureTextEntry
+                                placeholderTextColor='white'
+                            ></TextInput>
+                            <View style={styles.underline} />
+                            <TextInput
+                                style={styles.input}
+                                placeholder='Data de Nacimiento'
+                                onFocus={showDatePicker}
+                                placeholderTextColor='white'
+                            />
+                            <DateTimePickerModal
+                                isVisible={isDatePickerVisible}
+                                mode='date'
+                                onConfirm={handleConfirmDate]}
+                                onCancel={!showDatePicker}
+                            />
+
+                            <View style={styles.underline} />
+                        </View>
                         <Pressable
                             style={[
                                 styles.buttonText,
-                                { backgroundColor: '#D95507' },
+                                {
+                                    backgroundColor: '#D95507',
+                                    borderRadius: 40,
+                                    marginTop: 10,
+                                    height: 55,
+                                },
                             ]}
-                            onPress={() => navigation.navigate('Home')}
+                            onPress={() => navigation.navigate('')}
                         >
-                            <Text style={styles.buttonText}>Registrarse</Text>
+                            <Text
+                                style={[styles.buttonText, { marginTop: 18 }]}
+                            >
+                                Registrarse
+                            </Text>
                         </Pressable>
                     </View>
                 )}
@@ -159,11 +241,23 @@ const styles = StyleSheet.create({
         width: '90%',
         height: '50%',
         padding: 20,
-        marginTop: -30,
+        marginTop: '500',
         backgroundColor: 'lightgray',
         opacity: 0.9,
         borderRadius: 40,
         bottom: -150,
+        zIndex: 1,
+    },
+
+    formContainerKeyboardIsOpened: {
+        width: '90%',
+        height: '50%',
+        padding: 20,
+        marginTop: '500',
+        backgroundColor: 'lightgray',
+        opacity: 0.9,
+        borderRadius: 40,
+        bottom: 150,
         zIndex: 1,
     },
     buttonContainer: {
@@ -172,6 +266,20 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         alignSelf: 'center',
         marginLeft: 10,
+    },
+
+    registerButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignSelf: 'center',
+        marginLeft: 10,
+        borderRadius: 40,
+    },
+    inputRegister: {
+        padding: 10,
+        backgroundColor: 'transparent',
+        color: 'black',
+        fontSize: 16,
     },
     button: {
         height: 55,
@@ -188,12 +296,14 @@ const styles = StyleSheet.create({
     buttonText: {
         textAlign: 'center',
         marginTop: 10,
+        borderRadius: 40,
+        color: 'white',
     },
     form: {
         justifyContent: 'center',
     },
     input: {
-        marginTop: 12,
+        marginTop: 0,
         padding: 10,
         backgroundColor: 'transparent',
         color: 'black',
@@ -201,8 +311,8 @@ const styles = StyleSheet.create({
     },
     underline: {
         height: 2,
-        backgroundColor: 'black',
-        marginTop: 2,
+        backgroundColor: 'white',
+        marginTop: -3,
     },
 
     textButton: {
